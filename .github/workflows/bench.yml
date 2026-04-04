@@ -26,7 +26,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install Rust (stable)
-        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # stable
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
+        with:
+          toolchain: stable
 
       # Cache only the dep registry — do NOT cache target/, because
       # criterion baseline data lives there and must be fresh each run.
