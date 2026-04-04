@@ -1,0 +1,12 @@
+[book]
+title = "squint"
+authors = ["IlllIIIlllIlIlIIllllIIIlI"]
+description = "A fast SQL linter for dbt and Jinja SQL files"
+src = "src"
+language = "en"
+
+[output.html]
+default-theme = "rust"
+git-repository-url = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+edit-url-template = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/edit/main/docs/src/{path}"
+no-section-label = false

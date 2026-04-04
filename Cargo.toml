@@ -1,7 +1,52 @@
 [package]
-name = "rust-sql-linter"
-version = "0.1.0"
-edition = "2024"
+name          = "squint"
+version       = "0.1.0"
+edition       = "2021"
+description   = "A fast SQL linter for dbt and Jinja SQL files"
+authors       = ["IlllIIIlllIlIlIIllllIIIlI"]
+repository    = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+homepage      = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+documentation = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint#readme"
+keywords      = ["dbt", "jinja", "linter", "sql", "sqlfluff"]
+categories    = ["command-line-utilities", "development-tools"]
+license       = "MIT"
+readme        = "README.md"
+exclude       = [".claude/", "benches/", "results/", "scripts/", "tests/"]
 
 [dependencies]
-regex = "1.11.1"
+regex      = "1.11.1"
+clap       = { version = "4", features = ["derive"] }
+serde      = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml       = "0.8"
+phf        = { version = "0.11", features = ["macros"] }
+logos      = "0.14"
+rayon      = "1.10"
+ignore     = "0.4"
+globset    = "0.4"
+tower-lsp  = { version = "0.20", optional = true }
+tokio      = { version = "1", features = ["full"], optional = true }
+
+[features]
+lsp = ["tokio", "tower-lsp"]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name    = "linter_bench"
+harness = false
+
+[[bin]]
+name              = "squint-lsp"
+path              = "src/bin/squint_lsp.rs"
+required-features = ["lsp"]
+
+# maturin uses this to know the wheel entry-point name matches the binary name.
+[package.metadata.maturin]
+bindings = "bin"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"

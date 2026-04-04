@@ -1,0 +1,35 @@
+repos:
+  # ── General file hygiene ─────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-yaml
+      - id: check-toml
+
+  # ── Local Rust / TOML tools ──────────────────────────────────────────────────
+  # These require the tools to be installed once:
+  #   cargo install taplo-cli   (TOML formatter)
+  # cargo fmt comes with rustup automatically.
+  - repo: local
+    hooks:
+      - id: cargo-fmt
+        name: cargo fmt
+        language: system
+        entry: cargo fmt --
+        types: [rust]
+        pass_filenames: true
+
+      - id: taplo-fmt
+        name: taplo fmt (TOML)
+        language: system
+        entry: taplo fmt
+        types: [toml]
+        pass_filenames: true

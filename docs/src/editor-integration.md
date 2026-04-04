@@ -1,0 +1,84 @@
+# Editor Integration (LSP)
+
+The linter ships a Language Server Protocol (LSP) server binary that provides real-time
+diagnostics in any LSP-capable editor.
+
+## Building the LSP server
+
+The LSP server is feature-gated. Build it with:
+
+```bash
+cargo install squint --features lsp --bin squint-lsp
+```
+
+Or from source:
+
+```bash
+cargo build --release --features lsp --bin squint-lsp
+# Binary: target/release/squint-lsp
+```
+
+## Protocol
+
+- Transport: stdio
+- Document sync: full (re-lints the full document on every change)
+- Capabilities: `textDocument/publishDiagnostics`
+- Config: reads `.sql-linter.toml` from the working directory at startup
+
+## Neovim (nvim-lspconfig)
+
+```lua
+local lspconfig = require('lspconfig')
+local configs = require('lspconfig.configs')
+
+if not configs.sql_linter then
+  configs.sql_linter = {
+    default_config = {
+      cmd = { vim.fn.expand('~/.cargo/bin/squint-lsp') },
+      filetypes = { 'sql' },
+      root_dir = lspconfig.util.root_pattern('.sql-linter.toml', '.git'),
+      settings = {},
+    },
+  }
+end
+
+lspconfig.sql_linter.setup {}
+```
+
+## Helix (`languages.toml`)
+
+```toml
+[[language]]
+name = "sql"
+language-servers = ["sql-linter"]
+
+[language-server.sql-linter]
+command = "squint-lsp"
+```
+
+## VS Code
+
+A VS Code extension is planned but not yet available. In the meantime, you can use the
+[Generic LSP Client](https://marketplace.visualstudio.com/items?itemName=kosz78.generic-lsp)
+extension with:
+
+```json
+{
+  "genericLsp.servers": [
+    {
+      "name": "sql-linter",
+      "command": "squint-lsp",
+      "filetypes": ["sql"]
+    }
+  ]
+}
+```
+
+## Severity in diagnostics
+
+The LSP server maps rule severity to LSP diagnostic severity:
+
+- `error` → `DiagnosticSeverity::ERROR` (red underline in most themes)
+- `warning` → `DiagnosticSeverity::WARNING` (yellow underline)
+
+Per-rule severity overrides in `.sql-linter.toml` are respected.

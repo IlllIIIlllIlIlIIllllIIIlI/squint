@@ -1,0 +1,143 @@
+name: Benchmarks
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  benchmark:
+    name: Criterion regression check
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      # Cache only the dep registry — do NOT cache target/, because
+      # criterion baseline data lives there and must be fresh each run.
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-registry-
+
+      - name: Install critcmp
+        run: cargo install critcmp
+
+      # ── Baseline: benchmark the target branch (main) ──────────────────────────
+      - name: Add main branch worktree
+        run: git worktree add /tmp/bench-main origin/${{ github.base_ref }}
+
+      - name: Benchmark main branch (baseline)
+        working-directory: /tmp/bench-main
+        run: cargo bench --bench linter_bench -- --save-baseline main 2>&1
+
+      # ── PR branch benchmark ───────────────────────────────────────────────────
+      - name: Benchmark PR branch
+        run: cargo bench --bench linter_bench -- --save-baseline pr 2>&1
+
+      # ── Compare ───────────────────────────────────────────────────────────────
+      - name: Merge criterion data and compare
+        id: compare
+        run: |
+          # Make main's criterion baselines visible alongside PR's
+          cp -r /tmp/bench-main/target/criterion/* target/criterion/
+
+          # Run critcmp; capture output (|| true so a non-zero exit doesn't abort)
+          COMPARISON=$(critcmp main pr 2>&1 || true)
+          echo "$COMPARISON" | tee bench_comparison.txt
+
+          # Detect regressions > 20% (PR relative ratio > 1.20).
+          # critcmp output rows look like:
+          #   tokenize/Lexer/medium    1.00  48.34±0.47µs    1.05  50.76±0.31µs
+          # Field 5 is the PR-side relative ratio.
+          REGRESSIONS=$(awk 'NR>2 && NF>=5 {
+            val=$5; gsub(/[^0-9.]/, "", val);
+            if (val+0 > 1.20) print $0
+          }' bench_comparison.txt || true)
+
+          # Store outputs for the comment step
+          {
+            echo "COMPARISON<<EOF"
+            cat bench_comparison.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ -n "$REGRESSIONS" ]; then
+            echo "::warning::Benchmark regressions >20% detected"
+            {
+              echo "REGRESSIONS<<EOF"
+              echo "$REGRESSIONS"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            echo "HAS_REGRESSIONS=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "HAS_REGRESSIONS=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── Upload HTML report as artifact ────────────────────────────────────────
+      - name: Upload Criterion HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: criterion-report
+          path: target/criterion/report/
+          if-no-files-found: warn
+
+      # ── Post PR comment ───────────────────────────────────────────────────────
+      - name: Post benchmark results as PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comparison = `${{ steps.compare.outputs.COMPARISON }}`;
+            const regressions = `${{ steps.compare.outputs.REGRESSIONS }}`;
+            const hasRegressions = `${{ steps.compare.outputs.HAS_REGRESSIONS }}` === 'true';
+
+            const marker = '<!-- benchmark-results-comment -->';
+            let body = `${marker}\n## Benchmark Results (main vs PR)\n\n`;
+            body += `<details><summary>critcmp output</summary>\n\n\`\`\`\n${comparison}\n\`\`\`\n</details>\n`;
+
+            if (hasRegressions) {
+              body += `\n> [!WARNING]\n> **Regressions detected (>20% slower than main):**\n> \`\`\`\n`;
+              body += regressions.split('\n').map(l => `> ${l}`).join('\n');
+              body += `\n> \`\`\`\n`;
+            } else {
+              body += `\n> No regressions detected (threshold: 20%).`;
+            }
+
+            body += `\n\nFull HTML report available in the [Actions artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).`;
+
+            // Update existing comment if present, otherwise create a new one.
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

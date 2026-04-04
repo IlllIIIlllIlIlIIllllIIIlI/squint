@@ -1,7 +1,6 @@
-use regex::Captures;
 use std::fmt::{Display, Formatter, Result};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum TokenType {
     FmtOff,
     FmtOn,
@@ -13,11 +12,8 @@ pub enum TokenType {
     JinjaBlockKeyword,
     QuotedName,
     Comment,
-    CommentStart,
-    CommentEnd,
     Semicolon,
     StatementStart,
-    StatementEnd,
     Star,
     Number,
     BracketOpen,
@@ -41,64 +37,44 @@ impl Display for TokenType {
     }
 }
 
-impl TokenType {
-    fn is_jinja_statement(&self) -> bool {
-        [
-            TokenType::JinjaStatement,
-            TokenType::JinjaBlockStart,
-            TokenType::JinjaBlockKeyword,
-            TokenType::JinjaBlockEnd,
-        ]
-        .contains(self)
-    }
-
-    pub fn does_not_set_prev_sql_context(&self) -> bool {
-        self.is_jinja_statement() || *self == TokenType::Newline
-    }
-}
-
+/// Token metadata: type and source position only.
+/// The token text lives in `Node::value`; the prefix lives in `Node::prefix`.
 #[derive(Debug)]
 pub struct Token {
     pub token_type: TokenType,
-    prefix: String,
-    pub token: String,
-    spos: usize,
-    epos: usize,
+    pub spos: usize,
+    pub epos: usize,
 }
 
 impl Display for Token {
     fn fmt(&self, f: &mut Formatter) -> Result {
         write!(
             f,
-            "type={}, token={}, spos={}, epos={}",
-            self.token_type, self.token, self.spos, self.epos
+            "type={}, spos={}, epos={}",
+            self.token_type, self.spos, self.epos
         )
     }
 }
 
-impl Token {
-    pub fn from_match(
-        &self,
-        source_string: &String,
-        caps: &Captures,
-        token_type: TokenType,
-    ) -> Token {
-        let whole_match = caps.get(0).unwrap();
-        let sub_match = caps.get(1).unwrap();
+impl TokenType {
+    /// Returns true for tokens that carry no semantic content (newlines and comments).
+    /// Use this when searching for the next meaningful token.
+    pub fn is_whitespace_or_comment(self) -> bool {
+        matches!(self, TokenType::Newline | TokenType::Comment)
+    }
 
-        let pos = whole_match.start();
-        let spos = sub_match.start();
-        let epos = sub_match.end();
-
-        let prefix = &source_string[pos..spos];
-        let token_text = &source_string[spos..epos];
-
-        Token {
-            token_type,
-            prefix: prefix.to_string(),
-            token: token_text.to_string(),
-            spos: pos,
-            epos: epos,
-        }
+    /// Returns true for Jinja template tokens and fmt-off/on markers.
+    /// These tokens have intentional surrounding whitespace that should not be linted.
+    pub fn is_jinja(self) -> bool {
+        matches!(
+            self,
+            TokenType::JinjaExpression
+                | TokenType::JinjaStatement
+                | TokenType::JinjaBlockStart
+                | TokenType::JinjaBlockEnd
+                | TokenType::JinjaBlockKeyword
+                | TokenType::FmtOff
+                | TokenType::FmtOn
+        )
     }
 }

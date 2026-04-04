@@ -1,0 +1,35 @@
+[build-system]
+requires = ["maturin>=1.7,<2"]
+build-backend = "maturin"
+
+[project]
+name = "squint"
+version = "0.1.0"
+description = "A fast SQL linter for dbt and Jinja SQL files"
+authors = [{ name = "IlllIIIlllIlIlIIllllIIIlI" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["dbt", "jinja", "linter", "sql", "sqlfluff"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
+
+[project.urls]
+Homepage = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+Repository = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+Documentation = "https://IlllIIIlllIlIlIIllllIIIlI.github.io/squint"
+"Bug Tracker" = "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/issues"
+
+[tool.maturin]
+# "bin" bindings: maturin packages the Rust binary into the wheel's
+# data/scripts directory, making it available as `squint` on PATH after
+# `pip install squint`.  No Python extension module is built.
+bindings = "bin"
+python-packages = ["python/squint"]
