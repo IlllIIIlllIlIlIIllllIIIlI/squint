@@ -364,6 +364,16 @@ cargo bench                       # Criterion microbenchmarks
 ./scripts/bench_compare.sh        # wall-clock comparison vs sqlfluff/sqlfmt
 ```
 
+### Fuzz testing
+
+```bash
+cargo install cargo-fuzz
+cargo +nightly fuzz run fuzz_lint fuzz/seeds/fuzz_lint -- -max_total_time=60
+```
+
+See `fuzz/fuzz_targets/` for all three targets (`fuzz_lex`, `fuzz_lint`, `fuzz_fix`)
+and `CONTRIBUTING.md` for full instructions.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
