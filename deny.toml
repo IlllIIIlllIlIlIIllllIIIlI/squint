@@ -1,0 +1,72 @@
+# cargo-deny configuration
+# https://embarkstudios.github.io/cargo-deny/
+
+[graph]
+# Evaluate the dependency graph for all targets (not just the host).
+all-features = false
+no-default-features = false
+
+# ---------------------------------------------------------------------------
+# Advisories — mirrors the RustSec advisory database
+# ---------------------------------------------------------------------------
+[advisories]
+# Warn on unmaintained crates; error on known vulnerabilities.
+version = 2
+ignore = [
+    # Add RUSTSEC-YYYY-NNNN entries here if a known advisory is a false
+    # positive for this project, with a comment explaining why it is safe.
+]
+
+# ---------------------------------------------------------------------------
+# Licenses — only allow permissive licenses compatible with MIT
+# ---------------------------------------------------------------------------
+[licenses]
+version = 2
+# All licenses observed in the dependency tree as of the initial release.
+# Add to this list only after reviewing the license text.
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "Unicode-3.0",
+    "Unlicense",
+    "ISC",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "0BSD",
+]
+# Reject anything with copyleft obligations that would affect distribution.
+# In cargo-deny >=0.14 these are expressed as exceptions on the allow list;
+# anything NOT in the allow list is denied by default when exceptions = "deny".
+exceptions = []
+# Confidence threshold for license text detection (0.0–1.0).
+confidence-threshold = 0.8
+
+# ---------------------------------------------------------------------------
+# Bans — block specific crates or duplicate versions
+# ---------------------------------------------------------------------------
+[bans]
+# Warn on multiple versions of the same crate being pulled in; this bloats
+# the binary and is often a sign of a transitive dependency conflict.
+multiple-versions = "warn"
+# Deny crates that are known to be problematic, unmaintained, or insecure.
+deny = [
+    # Avoid the deprecated openssl crate in favour of rustls where possible.
+    # (Currently no dependency pulls it in — keep this as a guard.)
+    # { name = "openssl" },
+]
+skip = [
+    # If a duplicate version warning fires for a specific crate that cannot
+    # be resolved immediately, add it here with an explanation:
+    # { name = "some-crate", version = "=1.0.0", reason = "..." }
+]
+
+# ---------------------------------------------------------------------------
+# Sources — only allow crates from crates.io; no git dependencies in release
+# ---------------------------------------------------------------------------
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
