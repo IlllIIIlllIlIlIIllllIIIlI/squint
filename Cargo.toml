@@ -19,8 +19,8 @@ clap       = { version = "4", features = ["derive"] }
 serde      = { version = "1", features = ["derive"] }
 serde_json = "1"
 toml       = "0.8"
-phf        = { version = "0.11", features = ["macros"] }
-logos      = "0.14"
+phf        = { version = "0.13", features = ["macros"] }
+logos      = "0.16"
 rayon      = "1.10"
 ignore     = "0.4"
 globset    = "0.4"
@@ -31,7 +31,7 @@ tokio      = { version = "1", features = ["full"], optional = true }
 lsp = ["tokio", "tower-lsp"]
 
 [dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.8", features = ["html_reports"] }
 
 [[bench]]
 name    = "linter_bench"
