@@ -149,7 +149,13 @@ fn lex_string(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
             _ => i += 1,
         }
     }
-    Filter::Skip
+    // Unterminated string literal: consume remaining bytes and emit.
+    // Returning Filter::Skip would silently drop the opening `'` from
+    // pending_prefix, causing the next token's prefix to have a shorter
+    // byte length than the actual gap — which can put fix offsets inside
+    // a multi-byte character and panic in replace_range.
+    lex.bump(bytes.len());
+    Filter::Emit(())
 }
 
 // ── DFA token enum ────────────────────────────────────────────────────────────
@@ -467,5 +473,18 @@ mod tests {
         let types = token_types("a != b AND c >= d");
         assert!(types.contains(&TokenType::Operator));
         assert!(types.contains(&TokenType::BooleanOperator));
+    }
+
+    #[test]
+    fn test_unterminated_string_does_not_drop_bytes() {
+        // Regression: "s<multibyte>'m" — the unterminated string literal `'m`
+        // previously returned Filter::Skip, silently dropping `'` from pending_prefix.
+        // This caused the next token's prefix byte length to be shorter than the actual
+        // byte gap, producing Fix offsets inside a multi-byte character → panic in
+        // replace_range.  Now unterminated strings are emitted as a StringLit token.
+        let source = "s\u{07D5}'m"; // bytes: s DF 95 ' m
+        let tokens = Lexer::new(source).tokenize();
+        // The `'m` fragment must appear as a token (StringLit/Data), not be silently dropped.
+        assert!(tokens.iter().any(|t| t.token_type == TokenType::Data));
     }
 }
