@@ -277,6 +277,36 @@ jobs:
 
           gh release create "${{ needs.plan.outputs.tag }}" --target "$RELEASE_COMMIT" $PRERELEASE_FLAG --title "$ANNOUNCEMENT_TITLE" --notes-file "$RUNNER_TEMP/notes.txt" artifacts/*
 
+  # Sign every release artifact with Sigstore via GitHub's native OIDC token.
+  # Consumers can verify with: gh attestation verify <file> --repo <owner/repo>
+  # Runs after host (which creates the GitHub Release and uploads artifacts).
+  attest:
+    needs:
+      - plan
+      - host
+    if: ${{ needs.plan.outputs.publishing == 'true' && needs.host.result == 'success' }}
+    runs-on: "ubuntu-22.04"
+    permissions:
+      contents: read
+      id-token: write      # needed for OIDC token used by Sigstore
+      attestations: write  # needed to publish the attestation to GitHub
+
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v7
+        with:
+          pattern: artifacts-build-local-*
+          path: artifacts
+          merge-multiple: true
+
+      - name: Remove manifest files (attest binaries only)
+        run: find artifacts -name '*-dist-manifest.json' -delete
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: artifacts/*
+
   announce:
     needs:
       - plan

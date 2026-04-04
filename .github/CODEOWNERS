@@ -1,0 +1,16 @@
+# CODEOWNERS — changes to these paths require review from the listed owners.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Catch-all: everything requires review from the maintainer.
+*                                   @IlllIIIlllIlIlIIllllIIIlI
+
+# CI and release pipelines — extra scrutiny; any change here is a security surface.
+.github/                            @IlllIIIlllIlIlIIllllIIIlI
+.github/workflows/                  @IlllIIIlllIlIlIIllllIIIlI
+dist-workspace.toml                 @IlllIIIlllIlIlIIllllIIIlI
+
+# Dependency manifests — watch for unexpected additions or version changes.
+Cargo.toml                          @IlllIIIlllIlIlIIllllIIIlI
+Cargo.lock                          @IlllIIIlllIlIlIIllllIIIlI
+pyproject.toml                      @IlllIIIlllIlIlIIllllIIIlI
+deny.toml                           @IlllIIIlllIlIlIIllllIIIlI
