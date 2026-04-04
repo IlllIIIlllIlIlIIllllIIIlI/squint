@@ -39,7 +39,7 @@ impl Rule for Indent {
             }
 
             // Indentation must be a multiple of 4 spaces
-            if leading.len() % 4 != 0 {
+            if !leading.len().is_multiple_of(4) {
                 violations.push(Violation {
                     line: line_num,
                     col: 1,
