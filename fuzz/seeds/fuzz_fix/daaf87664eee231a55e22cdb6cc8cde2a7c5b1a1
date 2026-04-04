@@ -1,0 +1,1 @@
+1\nfroSELECT a, select a -- noqa: CP01\nfrom t -- fmt: offT a, b Fa = 1

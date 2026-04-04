@@ -1,0 +1,1 @@
+senect count(*) from t group by a havinw count(*) > 2 orderM tECT a,ECT10

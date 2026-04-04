@@ -1,0 +1,1 @@
+with s (select 1) sele as ct * from rocte

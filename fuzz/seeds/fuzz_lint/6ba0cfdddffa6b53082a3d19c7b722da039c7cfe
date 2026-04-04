@@ -1,0 +1,1 @@
+select a  CP01\nfrom t --eelect 0-- noqa[: CP01\nfrom t --eelect 0mt: off

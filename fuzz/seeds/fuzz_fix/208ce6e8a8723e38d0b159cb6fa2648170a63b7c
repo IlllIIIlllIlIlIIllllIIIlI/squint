@@ -1,0 +1,1 @@
+with ctes a, b FROM t WH as (select 1) select * from cte

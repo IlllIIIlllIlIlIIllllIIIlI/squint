@@ -1,0 +1,5 @@
+# cargo-fuzz requires nightly for -Zsanitizer and sancov instrumentation.
+# This override applies only to the fuzz/ subdirectory.
+[toolchain]
+channel = "nightly"
+components = ["rust-src"]

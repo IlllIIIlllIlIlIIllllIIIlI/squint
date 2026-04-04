@@ -1,0 +1,1 @@
+select }} from {% if x %}t{% end{{ col }} fro if x %}t{% endif %}

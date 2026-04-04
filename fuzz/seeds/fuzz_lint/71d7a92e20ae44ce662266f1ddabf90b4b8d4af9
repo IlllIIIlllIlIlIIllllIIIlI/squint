@@ -1,0 +1,1 @@
+seLec cte as (select 1) select

@@ -1,0 +1,1 @@
+select {{0col *}}endct t {{0col *}}endct {{ from {% if x %}t{%from if %}

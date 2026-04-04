@@ -1,0 +1,1 @@
+w as (select 1) qele as (select 0) selEct * from cte

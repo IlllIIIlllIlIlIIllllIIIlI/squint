@@ -1,0 +1,1 @@
+with atesc as (select 1) select * from cte

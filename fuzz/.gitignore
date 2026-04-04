@@ -1,0 +1,6 @@
+target
+artifacts
+coverage
+# Track seed corpus inputs but not fuzzer-generated corpus entries.
+# The seed/ directory is committed; corpus/ is gitignored (can grow large).
+corpus

@@ -1,0 +1,1 @@
+select {{$col }} frwith om {% if xct } frwith om {% i frwith om {% s 8

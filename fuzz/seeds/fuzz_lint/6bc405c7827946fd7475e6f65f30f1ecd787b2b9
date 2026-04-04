@@ -1,0 +1,1 @@
+select count(s1 limit(sorder by 1 limit(se

@@ -1,0 +1,1 @@
+with ate as (select 1) select * from cte
