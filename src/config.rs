@@ -319,7 +319,10 @@ LT05 = "warning"
         let cfg: Config = toml::from_str(&section_str).unwrap();
         assert_eq!(cfg.rules.lt05.max_line_length, 88);
         assert_eq!(cfg.exclude, vec!["target/**"]);
-        assert_eq!(cfg.rules.severity.get("LT05").map(|s| s.as_str()), Some("warning"));
+        assert_eq!(
+            cfg.rules.severity.get("LT05").map(|s| s.as_str()),
+            Some("warning")
+        );
     }
 
     #[test]
