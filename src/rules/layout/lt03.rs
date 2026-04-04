@@ -59,9 +59,7 @@ fn trailing_ws_ranges(source: &str) -> Vec<(usize, usize, usize)> {
             .unwrap_or(source.len());
 
         let line_content = &source[pos..line_end];
-        let trimmed_len = line_content
-            .trim_end_matches([' ', '\t'])
-            .len();
+        let trimmed_len = line_content.trim_end_matches([' ', '\t']).len();
 
         if trimmed_len < line_content.len() {
             let ws_start = pos + trimmed_len;
