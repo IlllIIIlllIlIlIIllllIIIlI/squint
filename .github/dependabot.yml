@@ -1,0 +1,28 @@
+version: 2
+
+updates:
+  # Keep GitHub Actions pinned to current SHAs and open PRs when new versions release.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # Keep Cargo dependencies up to date.
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "chore"
+    # Ignore patch bumps for stable, well-known crates to reduce noise.
+    ignore:
+      - dependency-name: "regex"
+        update-types: ["version-update:semver-patch"]
