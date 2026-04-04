@@ -108,4 +108,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `.pre-commit-hooks.yaml` — `squint` (lint) and `squint-fix` (lint + fix) hooks
 - MIT license
 
+### Changed
+
+- **Config file renamed** from `.sql-linter.toml` to `squint.toml`. Rename your config file before upgrading.
+- **Pre-commit hook IDs renamed**: `sql-linter` → `squint`, `sql-linter-fix` → `squint-fix`. Update your `.pre-commit-config.yaml` accordingly.
+- **`pyproject.toml` support**: config can now be placed under `[tool.squint]` in `pyproject.toml`. squint checks `squint.toml` first, then `pyproject.toml` with a `[tool.squint]` section, at each level of the directory walk.
+
 [Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/HEAD...HEAD
