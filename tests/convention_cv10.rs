@@ -12,11 +12,7 @@ fn cv10_all_unquoted_ok() {
 
 #[test]
 fn cv10_all_quoted_ok() {
-    assert!(check(
-        QuotingStyle,
-        "select \"col\" from \"my_table\"\n"
-    )
-    .is_empty());
+    assert!(check(QuotingStyle, "select \"col\" from \"my_table\"\n").is_empty());
 }
 
 #[test]
@@ -49,10 +45,7 @@ fn cv10_only_first_conflict_per_name() {
 
 #[test]
 fn cv10_multiple_inconsistent_names_flagged() {
-    let v = check(
-        QuotingStyle,
-        "select a, \"b\", b, \"a\" from t\n",
-    );
+    let v = check(QuotingStyle, "select a, \"b\", b, \"a\" from t\n");
     assert_eq!(v.len(), 2); // both 'a' and 'b' are inconsistent
 }
 

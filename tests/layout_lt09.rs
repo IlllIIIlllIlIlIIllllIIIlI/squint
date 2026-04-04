@@ -32,11 +32,7 @@ fn lt09_select_from_where_ok() {
 #[test]
 fn lt09_skipped_clauses_ok() {
     // GROUP BY without WHERE is fine
-    assert!(check(
-        ClauseOrdering,
-        "select a, count(*) from t group by a\n"
-    )
-    .is_empty());
+    assert!(check(ClauseOrdering, "select a, count(*) from t group by a\n").is_empty());
 }
 
 #[test]
@@ -56,10 +52,7 @@ fn lt09_order_before_where_flagged() {
 
 #[test]
 fn lt09_group_after_order_flagged() {
-    let v = check(
-        ClauseOrdering,
-        "select a from t order by a group by a\n",
-    );
+    let v = check(ClauseOrdering, "select a from t order by a group by a\n");
     assert_eq!(v.len(), 1);
     assert!(v[0].message.contains("GROUP"));
 }
@@ -76,10 +69,7 @@ fn lt09_having_before_group_flagged() {
 
 #[test]
 fn lt09_limit_before_order_flagged() {
-    let v = check(
-        ClauseOrdering,
-        "select a from t limit 10 order by a\n",
-    );
+    let v = check(ClauseOrdering, "select a from t limit 10 order by a\n");
     assert_eq!(v.len(), 1);
     assert!(v[0].message.contains("ORDER"));
 }
