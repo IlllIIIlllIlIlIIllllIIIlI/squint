@@ -61,7 +61,9 @@ mod tests {
 
     #[test]
     fn test_explicit_join_ok() {
-        assert!(violations("select a.id from foo as a inner join bar as b on a.id = b.id").is_empty());
+        assert!(
+            violations("select a.id from foo as a inner join bar as b on a.id = b.id").is_empty()
+        );
     }
 
     #[test]
