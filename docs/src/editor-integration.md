@@ -23,7 +23,7 @@ cargo build --release --features lsp --bin squint-lsp
 - Transport: stdio
 - Document sync: full (re-lints the full document on every change)
 - Capabilities: `textDocument/publishDiagnostics`
-- Config: reads `squint.toml` from the working directory at startup
+- Config: reads `squint.toml` or `[tool.squint]` in `pyproject.toml` from the working directory at startup
 
 ## Neovim (nvim-lspconfig)
 
@@ -36,7 +36,7 @@ if not configs.squint then
     default_config = {
       cmd = { vim.fn.expand('~/.cargo/bin/squint-lsp') },
       filetypes = { 'sql' },
-      root_dir = lspconfig.util.root_pattern('squint.toml', '.git'),
+      root_dir = lspconfig.util.root_pattern('squint.toml', 'pyproject.toml', '.git'),
       settings = {},
     },
   }

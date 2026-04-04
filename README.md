@@ -85,8 +85,8 @@ detected drift), `2` = I/O error.
 
 ## Configuration
 
-Create `squint.toml` in your project root (or any ancestor directory). CLI flags
-override config values.
+Create `squint.toml` in your project root, or use `[tool.squint]` in `pyproject.toml`.
+CLI flags override config values.
 
 ```toml
 # Paths to exclude (matched relative to the config file)
@@ -269,7 +269,7 @@ if not configs.squint then
     default_config = {
       cmd = { '/path/to/squint-lsp' },
       filetypes = { 'sql' },
-      root_dir = lspconfig.util.root_pattern('squint.toml', '.git'),
+      root_dir = lspconfig.util.root_pattern('squint.toml', 'pyproject.toml', '.git'),
       settings = {},
     },
   }
