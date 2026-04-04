@@ -54,5 +54,5 @@ See [JSON Output](json-output.md).
 
 ## Environment
 
-The linter reads `.sql-linter.toml` by walking up from the current working directory.
+The linter reads `squint.toml` by walking up from the current working directory.
 CLI flags always override config file values.

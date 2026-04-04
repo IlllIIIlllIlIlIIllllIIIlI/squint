@@ -85,8 +85,8 @@ detected drift), `2` = I/O error.
 
 ## Configuration
 
-Create `.sql-linter.toml` in your project root (or any ancestor directory). CLI flags
-override config values.
+Create `squint.toml` in your project root, or use `[tool.squint]` in `pyproject.toml`.
+CLI flags override config values.
 
 ```toml
 # Paths to exclude (matched relative to the config file)
@@ -264,21 +264,21 @@ cargo build --release --features lsp --bin squint-lsp
 local lspconfig = require('lspconfig')
 local configs = require('lspconfig.configs')
 
-if not configs.sql_linter then
-  configs.sql_linter = {
+if not configs.squint then
+  configs.squint = {
     default_config = {
       cmd = { '/path/to/squint-lsp' },
       filetypes = { 'sql' },
-      root_dir = lspconfig.util.root_pattern('.sql-linter.toml', '.git'),
+      root_dir = lspconfig.util.root_pattern('squint.toml', 'pyproject.toml', '.git'),
       settings = {},
     },
   }
 end
 
-lspconfig.sql_linter.setup {}
+lspconfig.squint.setup {}
 ```
 
-The LSP server loads `.sql-linter.toml` from the working directory at startup, so
+The LSP server loads `squint.toml` from the working directory at startup, so
 per-rule severity overrides are respected in editor diagnostics.
 
 ## pre-commit
@@ -290,7 +290,7 @@ repos:
   - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
     rev: v0.1.0
     hooks:
-      - id: sql-linter
+      - id: squint
 ```
 
 pre-commit will build the binary from source on first run (requires Rust installed on
@@ -300,8 +300,8 @@ the CI runner or developer machine). Subsequent runs use the cached build.
 
 | Hook ID | Behaviour |
 |---|---|
-| `sql-linter` | Lint staged `.sql` files; fail the commit if any `error`-severity violations exist |
-| `sql-linter-fix` | Lint and auto-fix staged `.sql` files in place; pre-commit re-stages the changes |
+| `squint` | Lint staged `.sql` files; fail the commit if any `error`-severity violations exist |
+| `squint-fix` | Lint and auto-fix staged `.sql` files in place; pre-commit re-stages the changes |
 
 **Lint only (recommended for CI):**
 
@@ -309,7 +309,7 @@ the CI runner or developer machine). Subsequent runs use the cached build.
 - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
   rev: v0.1.0
   hooks:
-    - id: sql-linter
+    - id: squint
 ```
 
 **Lint + auto-fix on commit (recommended for local development):**
@@ -318,7 +318,7 @@ the CI runner or developer machine). Subsequent runs use the cached build.
 - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
   rev: v0.1.0
   hooks:
-    - id: sql-linter-fix
+    - id: squint-fix
 ```
 
 **Run only specific rules:**
@@ -327,7 +327,7 @@ the CI runner or developer machine). Subsequent runs use the cached build.
 - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
   rev: v0.1.0
   hooks:
-    - id: sql-linter
+    - id: squint
       args: [--rules, "CP01,LT05,LT12"]
 ```
 

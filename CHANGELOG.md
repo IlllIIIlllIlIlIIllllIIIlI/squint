@@ -89,10 +89,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 #### Severity levels
 - `Error` (default) and `Warning` severity per rule
 - Exit code 1 only when at least one `Error`-severity violation exists
-- Per-rule severity override in `.sql-linter.toml` under `[rules.severity]`
+- Per-rule severity override in `squint.toml` under `[rules.severity]`
 
 #### Configuration
-- `.sql-linter.toml` config file; loaded by walking up from `cwd`
+- `squint.toml` config file; loaded by walking up from `cwd`
 - Per-rule configuration for `LT05`, `AL06`, `CV03`, `CV04`, `AM06`
 - `exclude` glob patterns at the top level
 
@@ -105,12 +105,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - GitHub Actions CI: build, test, `rustfmt`, `clippy` on every push and PR
 - GitHub Actions benchmark regression check on PRs (Criterion + `critcmp`)
 - Criterion microbenchmarks; Hyperfine wall-clock comparison vs sqlfluff/sqlfmt
-- `.pre-commit-hooks.yaml` — `sql-linter` (lint) and `sql-linter-fix` (lint + fix) hooks
+- `.pre-commit-hooks.yaml` — `squint` (lint) and `squint-fix` (lint + fix) hooks
 - MIT license
 - cargo-fuzz integration: three fuzz targets (`fuzz_lex`, `fuzz_lint`, `fuzz_fix`); 30-second CI smoke run on every PR, 5-minute weekly scheduled run
 
 ### Fixed
 
 - **Panic on unterminated string literals or Jinja/block-comment blocks containing multi-byte UTF-8 characters** — `lex_string`, `lex_jinja_expr`, `lex_jinja_stmt`, `lex_jinja_comment`, and `lex_block_comment` all returned `Filter::Skip` when their closing delimiter was missing. Logos advances past the opening bytes without yielding them, so they are never appended to `pending_prefix`. This made the next token's prefix shorter than the actual byte gap; fix offsets computed as `spos - prefix.len()` could then land inside a multi-byte character. Two failure modes: `replace_range` panic (intercepted by the char-boundary guard in `apply_fixes`) and a `str` slice panic in `byte_to_line` which is called with `fix.start` before `apply_fixes` is reached. Fixed by: (1) all five callbacks now bump to end of input and emit on missing delimiter; (2) `byte_to_line` uses `.as_bytes()` slicing instead of `str` slicing. Found by `cargo fuzz`.
+
+### Changed
+
+- **Config file renamed** from `.sql-linter.toml` to `squint.toml`. Rename your config file before upgrading.
+- **Pre-commit hook IDs renamed**: `sql-linter` → `squint`, `sql-linter-fix` → `squint-fix`. Update your `.pre-commit-config.yaml` accordingly.
+- **`pyproject.toml` support**: config can now be placed under `[tool.squint]` in `pyproject.toml`. squint checks `squint.toml` first, then `pyproject.toml` with a `[tool.squint]` section, at each level of the directory walk.
 
 [Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/HEAD...HEAD

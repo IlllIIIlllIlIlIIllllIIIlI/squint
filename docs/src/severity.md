@@ -14,7 +14,7 @@ a rollout period, then promote them to `error` once the codebase is clean.
 
 ## Configuring severity
 
-Override per rule in `.sql-linter.toml`:
+Override per rule in `squint.toml`:
 
 ```toml
 [rules.severity]

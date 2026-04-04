@@ -75,7 +75,7 @@ and is flagged by many code review tools.
 
 **Lines must not exceed `max_line_length` characters (default: 120).**
 
-Configure in `.sql-linter.toml`:
+Configure in `squint.toml`:
 
 ```toml
 [rules.LT05]

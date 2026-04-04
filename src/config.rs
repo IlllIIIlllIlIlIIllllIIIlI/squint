@@ -2,14 +2,14 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-/// Top-level config, loaded from `.sql-linter.toml`.
+/// Top-level config, loaded from `squint.toml`.
 #[derive(Debug, Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
     pub rules: RulesConfig,
     /// Glob patterns for files/directories to exclude from linting.
     /// Matched against each path relative to the directory containing
-    /// `.sql-linter.toml` (or the current working directory if no config
+    /// `squint.toml` (or the current working directory if no config
     /// file is found). Examples: `["target/**", "**/node_modules/**"]`.
     #[serde(default)]
     pub exclude: Vec<String>,
@@ -124,22 +124,42 @@ pub struct Am06Config {
 
 // ── Loading ──────────────────────────────────────────────────────────────────
 
+enum ConfigFile {
+    SquintToml(PathBuf),
+    PyprojectToml(PathBuf),
+}
+
 impl Config {
-    /// Load config by walking up from `start_dir` looking for `.sql-linter.toml`.
-    /// Returns `Config::default()` if no file is found.
+    /// Load config by walking up from `start_dir`.
+    ///
+    /// Search order at each directory level:
+    /// 1. `squint.toml` — dedicated config file
+    /// 2. `pyproject.toml` containing a `[tool.squint]` section
+    ///
+    /// Returns `Config::default()` with `base_dir = start_dir` if neither is found.
     pub fn load(start_dir: &Path) -> Self {
-        if let Some(path) = find_config_file(start_dir) {
-            let base_dir = path.parent().unwrap_or(start_dir).to_path_buf();
-            match std::fs::read_to_string(&path) {
-                Ok(contents) => match toml::from_str::<Config>(&contents) {
-                    Ok(mut cfg) => {
-                        cfg.base_dir = base_dir;
-                        return cfg;
-                    }
-                    Err(e) => eprintln!("warning: could not parse {}: {}", path.display(), e),
-                },
-                Err(e) => eprintln!("warning: could not read {}: {}", path.display(), e),
+        match find_config_file(start_dir) {
+            Some(ConfigFile::SquintToml(path)) => {
+                let base_dir = path.parent().unwrap_or(start_dir).to_path_buf();
+                match std::fs::read_to_string(&path) {
+                    Ok(contents) => match toml::from_str::<Config>(&contents) {
+                        Ok(mut cfg) => {
+                            cfg.base_dir = base_dir;
+                            return cfg;
+                        }
+                        Err(e) => eprintln!("warning: could not parse {}: {}", path.display(), e),
+                    },
+                    Err(e) => eprintln!("warning: could not read {}: {}", path.display(), e),
+                }
             }
+            Some(ConfigFile::PyprojectToml(path)) => {
+                let base_dir = path.parent().unwrap_or(start_dir).to_path_buf();
+                if let Some(mut cfg) = load_from_pyproject(&path) {
+                    cfg.base_dir = base_dir;
+                    return cfg;
+                }
+            }
+            None => {}
         }
         Config {
             base_dir: start_dir.to_path_buf(),
@@ -148,15 +168,70 @@ impl Config {
     }
 }
 
-fn find_config_file(start: &Path) -> Option<PathBuf> {
+fn find_config_file(start: &Path) -> Option<ConfigFile> {
     let mut dir = start.to_path_buf();
     loop {
-        let candidate = dir.join(".sql-linter.toml");
-        if candidate.exists() {
-            return Some(candidate);
+        let squint = dir.join("squint.toml");
+        if squint.exists() {
+            return Some(ConfigFile::SquintToml(squint));
+        }
+        let pyproject = dir.join("pyproject.toml");
+        if pyproject.exists() && pyproject_has_squint_section(&pyproject) {
+            return Some(ConfigFile::PyprojectToml(pyproject));
         }
         if !dir.pop() {
             return None;
+        }
+    }
+}
+
+/// Returns true if `pyproject.toml` at `path` contains a `[tool.squint]` table.
+fn pyproject_has_squint_section(path: &Path) -> bool {
+    std::fs::read_to_string(path)
+        .ok()
+        .and_then(|s| toml::from_str::<toml::Value>(&s).ok())
+        .and_then(|v| v.get("tool").and_then(|t| t.get("squint")).cloned())
+        .is_some()
+}
+
+/// Extract `[tool.squint]` from a `pyproject.toml` and deserialise it as `Config`.
+fn load_from_pyproject(path: &Path) -> Option<Config> {
+    let contents = match std::fs::read_to_string(path) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("warning: could not read {}: {}", path.display(), e);
+            return None;
+        }
+    };
+    let doc: toml::Value = match toml::from_str(&contents) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("warning: could not parse {}: {}", path.display(), e);
+            return None;
+        }
+    };
+    let squint_section = doc.get("tool")?.get("squint")?;
+    // Re-serialise the subtable to a TOML string so we can reuse toml::from_str::<Config>.
+    let section_str = match toml::to_string(squint_section) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!(
+                "warning: could not re-serialise [tool.squint] from {}: {}",
+                path.display(),
+                e
+            );
+            return None;
+        }
+    };
+    match toml::from_str::<Config>(&section_str) {
+        Ok(cfg) => Some(cfg),
+        Err(e) => {
+            eprintln!(
+                "warning: could not parse [tool.squint] in {}: {}",
+                path.display(),
+                e
+            );
+            None
         }
     }
 }
@@ -224,5 +299,41 @@ exclude = ["target/**", "**/node_modules/**", "vendor/*.sql"]
     fn test_exclude_defaults_empty() {
         let cfg: Config = toml::from_str("").unwrap();
         assert!(cfg.exclude.is_empty());
+    }
+
+    #[test]
+    fn test_load_from_pyproject() {
+        let toml = r#"
+[tool.squint]
+exclude = ["target/**"]
+
+[tool.squint.rules.LT05]
+max_line_length = 88
+
+[tool.squint.rules.severity]
+LT05 = "warning"
+"#;
+        let doc: toml::Value = toml::from_str(toml).unwrap();
+        let section = doc["tool"]["squint"].clone();
+        let section_str = toml::to_string(&section).unwrap();
+        let cfg: Config = toml::from_str(&section_str).unwrap();
+        assert_eq!(cfg.rules.lt05.max_line_length, 88);
+        assert_eq!(cfg.exclude, vec!["target/**"]);
+        assert_eq!(
+            cfg.rules.severity.get("LT05").map(|s| s.as_str()),
+            Some("warning")
+        );
+    }
+
+    #[test]
+    fn test_pyproject_without_squint_section_ignored() {
+        // A pyproject.toml with no [tool.squint] should not be treated as config
+        let toml = r#"
+[tool.black]
+line-length = 88
+"#;
+        let doc: toml::Value = toml::from_str(toml).unwrap();
+        let has_squint = doc.get("tool").and_then(|t| t.get("squint")).is_some();
+        assert!(!has_squint);
     }
 }

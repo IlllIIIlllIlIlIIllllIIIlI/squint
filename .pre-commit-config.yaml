@@ -23,9 +23,8 @@ repos:
       - id: cargo-fmt
         name: cargo fmt
         language: system
-        entry: cargo fmt --
-        types: [rust]
-        pass_filenames: true
+        entry: cargo fmt
+        pass_filenames: false
 
       - id: taplo-fmt
         name: taplo fmt (TOML)

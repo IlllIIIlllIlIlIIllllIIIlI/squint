@@ -54,7 +54,7 @@ cat models/my_model.sql | squint --stdin-filename models/my_model.sql
 
 ## Typical dbt project setup
 
-1. Add a `.sql-linter.toml` at the project root (see [Configuration](configuration.md))
+1. Add a `squint.toml` at the project root (see [Configuration](configuration.md))
 2. Add a pre-commit hook (see [pre-commit Integration](pre-commit.md))
 3. Add `squint --check models/` to your CI pipeline
 

@@ -1,11 +1,15 @@
 # Configuration
 
-Create `.sql-linter.toml` in your project root (or any ancestor directory). The linter
-walks up from the current working directory to find the nearest config file.
+squint looks for config in your project root (or any ancestor directory), checking
+two locations in order at each level:
 
+1. **`squint.toml`** — dedicated config file
+2. **`pyproject.toml`** — under the `[tool.squint]` section
+
+The search walks up from the current working directory and stops at the first match.
 CLI flags always override config file values.
 
-## Full reference
+## `squint.toml`
 
 ```toml
 # Glob patterns to exclude from linting (relative to the config file).
@@ -56,6 +60,24 @@ group_by_and_order_by_style = "explicit"
 LT05 = "warning"   # long lines are warnings, not hard errors
 CP02 = "warning"   # identifier casing is a warning during rollout
 ```
+
+## `pyproject.toml`
+
+For Python projects, all the same options are available under `[tool.squint]`:
+
+```toml
+[tool.squint]
+exclude = ["target/**"]
+
+[tool.squint.rules.LT05]
+max_line_length = 88
+
+[tool.squint.rules.severity]
+LT05 = "warning"
+```
+
+squint only stops at a `pyproject.toml` if it contains a `[tool.squint]` section —
+a `pyproject.toml` without one is skipped and the walk continues upward.
 
 ## Severity levels
 

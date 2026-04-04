@@ -173,7 +173,7 @@ pub trait Rule: Send + Sync {
         vec![]
     }
     /// Default severity for violations from this rule.
-    /// Can be overridden per-rule in `.sql-linter.toml`.
+    /// Can be overridden per-rule in `squint.toml`.
     fn severity(&self) -> Severity {
         Severity::Error
     }

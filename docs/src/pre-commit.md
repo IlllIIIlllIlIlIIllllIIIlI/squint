@@ -12,7 +12,7 @@ repos:
   - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
     rev: v0.1.0   # pin to a release tag
     hooks:
-      - id: sql-linter
+      - id: squint
 ```
 
 Run `pre-commit install` once to register the hooks. On the first run, pre-commit
@@ -23,13 +23,13 @@ for subsequent runs.
 
 | Hook ID | What it does |
 |---|---|
-| `sql-linter` | Lint staged SQL files and exit 1 on any violations |
-| `sql-linter-fix` | Auto-fix staged SQL files in place |
+| `squint` | Lint staged SQL files and exit 1 on any violations |
+| `squint-fix` | Auto-fix staged SQL files in place |
 
 ### Lint only
 
 ```yaml
-- id: sql-linter
+- id: squint
 ```
 
 Fails the commit if any violations are found. The developer must fix violations
@@ -38,7 +38,7 @@ Fails the commit if any violations are found. The developer must fix violations
 ### Auto-fix on commit
 
 ```yaml
-- id: sql-linter-fix
+- id: squint-fix
 ```
 
 Rewrites staged files in place before the commit. If files are modified, pre-commit
@@ -47,7 +47,7 @@ frictionless setup for teams.
 
 ## Config file
 
-The linter reads `.sql-linter.toml` from the working directory at hook execution time.
+The linter reads `squint.toml` from the working directory at hook execution time.
 Project-level config (severity overrides, line length, etc.) is applied automatically.
 
 ## Pinning a version

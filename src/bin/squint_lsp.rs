@@ -89,7 +89,7 @@ impl Backend {
                     },
                     severity: Some(sev),
                     code: Some(NumberOrString::String(v.rule_id.to_string())),
-                    source: Some("sql-linter".to_string()),
+                    source: Some("squint".to_string()),
                     message: v.message.clone(),
                     ..Default::default()
                 }
