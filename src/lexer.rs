@@ -156,10 +156,10 @@ fn lex_string(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
 
 #[derive(Logos, Debug, PartialEq)]
 enum RawTok {
-    #[regex(r"--[^\n]*")]
+    #[regex(r"--[^\n]*", allow_greedy = true)]
     LineComment,
 
-    #[regex(r"#[^\n]*")]
+    #[regex(r"#[^\n]*", allow_greedy = true)]
     HashComment,
 
     #[token("{#", lex_jinja_comment)]
