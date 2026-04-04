@@ -89,10 +89,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 #### Severity levels
 - `Error` (default) and `Warning` severity per rule
 - Exit code 1 only when at least one `Error`-severity violation exists
-- Per-rule severity override in `.sql-linter.toml` under `[rules.severity]`
+- Per-rule severity override in `squint.toml` under `[rules.severity]`
 
 #### Configuration
-- `.sql-linter.toml` config file; loaded by walking up from `cwd`
+- `squint.toml` config file; loaded by walking up from `cwd`
 - Per-rule configuration for `LT05`, `AL06`, `CV03`, `CV04`, `AM06`
 - `exclude` glob patterns at the top level
 
@@ -105,7 +105,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - GitHub Actions CI: build, test, `rustfmt`, `clippy` on every push and PR
 - GitHub Actions benchmark regression check on PRs (Criterion + `critcmp`)
 - Criterion microbenchmarks; Hyperfine wall-clock comparison vs sqlfluff/sqlfmt
-- `.pre-commit-hooks.yaml` — `sql-linter` (lint) and `sql-linter-fix` (lint + fix) hooks
+- `.pre-commit-hooks.yaml` — `squint` (lint) and `squint-fix` (lint + fix) hooks
 - MIT license
 
 [Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/HEAD...HEAD

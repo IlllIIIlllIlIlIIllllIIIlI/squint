@@ -2,14 +2,14 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-/// Top-level config, loaded from `.sql-linter.toml`.
+/// Top-level config, loaded from `squint.toml`.
 #[derive(Debug, Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
     pub rules: RulesConfig,
     /// Glob patterns for files/directories to exclude from linting.
     /// Matched against each path relative to the directory containing
-    /// `.sql-linter.toml` (or the current working directory if no config
+    /// `squint.toml` (or the current working directory if no config
     /// file is found). Examples: `["target/**", "**/node_modules/**"]`.
     #[serde(default)]
     pub exclude: Vec<String>,
@@ -125,7 +125,7 @@ pub struct Am06Config {
 // ── Loading ──────────────────────────────────────────────────────────────────
 
 impl Config {
-    /// Load config by walking up from `start_dir` looking for `.sql-linter.toml`.
+    /// Load config by walking up from `start_dir` looking for `squint.toml`.
     /// Returns `Config::default()` if no file is found.
     pub fn load(start_dir: &Path) -> Self {
         if let Some(path) = find_config_file(start_dir) {
@@ -151,7 +151,7 @@ impl Config {
 fn find_config_file(start: &Path) -> Option<PathBuf> {
     let mut dir = start.to_path_buf();
     loop {
-        let candidate = dir.join(".sql-linter.toml");
+        let candidate = dir.join("squint.toml");
         if candidate.exists() {
             return Some(candidate);
         }

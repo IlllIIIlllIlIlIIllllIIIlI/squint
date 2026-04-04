@@ -1,13 +1,13 @@
-- id: sql-linter
-  name: SQL Linter
+- id: squint
+  name: squint
   description: Lint SQL files for style violations.
   language: rust
   entry: squint
   types_or: [sql]
   pass_filenames: true
 
-- id: sql-linter-fix
-  name: SQL Linter (fix)
+- id: squint-fix
+  name: squint (fix)
   description: >
     Lint SQL files and auto-fix all fixable violations in place.
     pre-commit will re-stage the modified files.

@@ -20,7 +20,7 @@ struct FileResult<'a> {
 #[command(
     name = "squint",
     about = "SQL linter for dbt/Jinja SQL files",
-    long_about = "Lints SQL files for style issues. Config can be set in .sql-linter.toml."
+    long_about = "Lints SQL files for style issues. Config can be set in squint.toml."
 )]
 struct Cli {
     /// SQL files or directories to lint

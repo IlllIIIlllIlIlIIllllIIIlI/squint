@@ -1,6 +1,6 @@
 # Configuration
 
-Create `.sql-linter.toml` in your project root (or any ancestor directory). The linter
+Create `squint.toml` in your project root (or any ancestor directory). The linter
 walks up from the current working directory to find the nearest config file.
 
 CLI flags always override config file values.

@@ -23,7 +23,7 @@ cargo build --release --features lsp --bin squint-lsp
 - Transport: stdio
 - Document sync: full (re-lints the full document on every change)
 - Capabilities: `textDocument/publishDiagnostics`
-- Config: reads `.sql-linter.toml` from the working directory at startup
+- Config: reads `squint.toml` from the working directory at startup
 
 ## Neovim (nvim-lspconfig)
 
@@ -31,18 +31,18 @@ cargo build --release --features lsp --bin squint-lsp
 local lspconfig = require('lspconfig')
 local configs = require('lspconfig.configs')
 
-if not configs.sql_linter then
-  configs.sql_linter = {
+if not configs.squint then
+  configs.squint = {
     default_config = {
       cmd = { vim.fn.expand('~/.cargo/bin/squint-lsp') },
       filetypes = { 'sql' },
-      root_dir = lspconfig.util.root_pattern('.sql-linter.toml', '.git'),
+      root_dir = lspconfig.util.root_pattern('squint.toml', '.git'),
       settings = {},
     },
   }
 end
 
-lspconfig.sql_linter.setup {}
+lspconfig.squint.setup {}
 ```
 
 ## Helix (`languages.toml`)
@@ -50,9 +50,9 @@ lspconfig.sql_linter.setup {}
 ```toml
 [[language]]
 name = "sql"
-language-servers = ["sql-linter"]
+language-servers = ["squint"]
 
-[language-server.sql-linter]
+[language-server.squint]
 command = "squint-lsp"
 ```
 
@@ -66,7 +66,7 @@ extension with:
 {
   "genericLsp.servers": [
     {
-      "name": "sql-linter",
+      "name": "squint",
       "command": "squint-lsp",
       "filetypes": ["sql"]
     }
@@ -81,4 +81,4 @@ The LSP server maps rule severity to LSP diagnostic severity:
 - `error` → `DiagnosticSeverity::ERROR` (red underline in most themes)
 - `warning` → `DiagnosticSeverity::WARNING` (yellow underline)
 
-Per-rule severity overrides in `.sql-linter.toml` are respected.
+Per-rule severity overrides in `squint.toml` are respected.
