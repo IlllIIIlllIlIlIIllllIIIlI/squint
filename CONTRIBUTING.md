@@ -18,6 +18,7 @@ Optional tools:
 | `taplo-cli` | `cargo install taplo-cli` | TOML formatter (used by pre-commit hook) |
 | `hyperfine` | system package | Wall-clock benchmarks vs sqlfluff/sqlfmt |
 | `critcmp` | `cargo install critcmp` | Comparing two Criterion baselines |
+| `cargo-fuzz` | `cargo install cargo-fuzz` | Fuzz testing (requires nightly) |
 
 ## Getting started
 
@@ -65,9 +66,34 @@ cargo fmt --check          # formatting
 cargo clippy -- -D warnings  # lints
 cargo test                 # all tests
 cargo audit                # dependency vulnerability scan (optional locally)
+cargo deny check           # license, ban, and advisory check
 ```
 
 Run `cargo fmt` (without `--check`) to auto-format before committing.
+
+## Fuzz testing
+
+Three fuzz targets exercise the lexer, lint pipeline, and fix pipeline against
+arbitrary UTF-8 input. They require a nightly toolchain (installed automatically
+from `fuzz/rust-toolchain.toml`).
+
+```bash
+# Install cargo-fuzz (one-time)
+cargo install cargo-fuzz
+
+# Run a target against the seed corpus for 60 seconds
+cargo +nightly fuzz run fuzz_lex   fuzz/seeds/fuzz_lex   -- -max_total_time=60
+cargo +nightly fuzz run fuzz_lint  fuzz/seeds/fuzz_lint  -- -max_total_time=60
+cargo +nightly fuzz run fuzz_fix   fuzz/seeds/fuzz_fix   -- -max_total_time=60
+
+# If a crash is found, reproduce it
+cargo +nightly fuzz run fuzz_lint fuzz/artifacts/fuzz_lint/crash-<hash>
+```
+
+Fuzz targets live in `fuzz/fuzz_targets/`. Seed inputs are in `fuzz/seeds/`
+(12 representative SQL inputs per target). CI runs a 30-second smoke-run on
+every PR and a 5-minute run weekly. Crash artifacts are uploaded automatically
+if a run fails.
 
 ## Commit conventions
 

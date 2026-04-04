@@ -1,0 +1,40 @@
+[package]
+name = "squint-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.squint]
+path = ".."
+
+# ── Fuzz targets ────────────────────────────────────────────────────────────
+
+# Target 1: lexer only — exercise the DFA tokeniser on arbitrary bytes.
+[[bin]]
+name = "fuzz_lex"
+path = "fuzz_targets/fuzz_lex.rs"
+test = false
+doc = false
+bench = false
+
+# Target 2: full lint pipeline — tokenise → parse → run all rules.
+[[bin]]
+name = "fuzz_lint"
+path = "fuzz_targets/fuzz_lint.rs"
+test = false
+doc = false
+bench = false
+
+# Target 3: full fix pipeline — lint + apply fixes until stable.
+[[bin]]
+name = "fuzz_fix"
+path = "fuzz_targets/fuzz_fix.rs"
+test = false
+doc = false
+bench = false

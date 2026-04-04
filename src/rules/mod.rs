@@ -31,6 +31,12 @@ pub fn apply_fixes(source: &str, fixes: Vec<Fix>) -> String {
         if fix.end > blocked_before {
             continue; // overlaps with an already-applied fix
         }
+        // Guard against fix offsets that don't land on UTF-8 character
+        // boundaries (e.g. produced when non-ASCII bytes appear in a token
+        // prefix due to unterminated string literals or other lexer edge cases).
+        if !result.is_char_boundary(fix.start) || !result.is_char_boundary(fix.end) {
+            continue;
+        }
         result.replace_range(fix.start..fix.end, &fix.replacement);
         blocked_before = fix.start;
     }

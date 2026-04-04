@@ -74,9 +74,11 @@ pub fn compute_fmt_off_ranges(nodes: &[Node<'_>], source: &str) -> FmtOffRanges 
 
 /// Convert a byte offset to a 1-based line number by counting preceding newlines.
 fn byte_to_line(source: &str, pos: usize) -> usize {
-    source[..pos.min(source.len())]
-        .bytes()
-        .filter(|&b| b == b'\n')
+    // Use as_bytes() so the slice never panics on a non-char-boundary offset.
+    // Counting newlines only requires byte access, not char access.
+    source.as_bytes()[..pos.min(source.len())]
+        .iter()
+        .filter(|&&b| b == b'\n')
         .count()
         + 1
 }
