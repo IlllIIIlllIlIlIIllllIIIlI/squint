@@ -1,1 +1,0 @@
-select t.id = u.ia frm   nott.id = u.id

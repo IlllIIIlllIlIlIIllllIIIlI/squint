@@ -1,1 +1,0 @@
-select q{ col }} from {% if x %}t{% endif %}

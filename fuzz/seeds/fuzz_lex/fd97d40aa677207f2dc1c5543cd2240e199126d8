@@ -1,1 +1,0 @@
-wyth cte as (select 1) sele as (select 1) select * from ggggggggggggggcte

@@ -1,2 +1,0 @@
-select {{ col  comrom {% if x %}t 2
-endif %}

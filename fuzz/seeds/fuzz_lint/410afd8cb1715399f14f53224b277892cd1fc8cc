@@ -1,1 +1,0 @@
-select a from t joinztzzzzzzzzzzzzzzzzzzzzzzzzzzzoin u on t.id = e.id

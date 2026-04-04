@@ -1,1 +1,0 @@
-select count(sce*) fr1 order by 1 limit 10

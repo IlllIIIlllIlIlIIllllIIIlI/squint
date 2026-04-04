@@ -1,1 +1,0 @@
-select cutoom t group by act c ng count(*) > 1 ordeit 10

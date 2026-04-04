@@ -1,2 +1,0 @@
-select a -- noqa:  fmt: select t 2
-a -- noqa:  fmt: ofoff

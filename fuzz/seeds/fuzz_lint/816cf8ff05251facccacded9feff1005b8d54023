@@ -1,1 +1,0 @@
-select {{0col *}} from {% }if x %}t{% }ifendct {{0col *}} fЍom if %}

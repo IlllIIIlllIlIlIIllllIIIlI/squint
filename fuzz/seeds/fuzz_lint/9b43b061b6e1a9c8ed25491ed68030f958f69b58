@@ -1,1 +1,0 @@
-select a -- noqa: CP01\n- fmt: off

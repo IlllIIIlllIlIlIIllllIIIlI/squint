@@ -1,1 +1,0 @@
-SELECT "quoted", `bacECT "quoted", `backtick`, [bracket] FROM t

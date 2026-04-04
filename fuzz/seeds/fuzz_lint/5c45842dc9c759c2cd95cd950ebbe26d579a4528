@@ -1,1 +1,0 @@
-select {{ col }} from {%-- just a  coi

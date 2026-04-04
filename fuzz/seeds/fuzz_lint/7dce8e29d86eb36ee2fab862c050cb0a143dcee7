@@ -1,1 +1,0 @@
-select a from t """""""""""""""["joinoin u on t.id ,,l-id

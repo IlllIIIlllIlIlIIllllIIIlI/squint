@@ -1,1 +1,0 @@
-select A -- noqa: CP01\nfrom t comfmt: off

@@ -1,1 +1,0 @@
-select {{0col *}}endct {{ from {% if x %}t{% endct {{0col *}} from if %}

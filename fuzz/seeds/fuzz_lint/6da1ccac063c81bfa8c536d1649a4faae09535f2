@@ -1,1 +1,0 @@
-select {{0col *}}eldct{{0col *}}endct {{ 0col *}}eldct t {{0col  if %}

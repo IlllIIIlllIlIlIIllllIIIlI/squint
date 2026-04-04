@@ -1,1 +1,0 @@
-with select *atesc as (selects (select 1) select 1) select * from cte

@@ -1,1 +1,0 @@
-select count(*)t count(*) from t group by a nselect count()t count(*) fr
