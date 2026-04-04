@@ -35,8 +35,7 @@ impl Rule for QuotingStyle {
                 Some(&first_was_quoted) => {
                     if first_was_quoted != is_quoted && !flagged.contains(&canonical) {
                         flagged.insert(canonical.clone());
-                        let (line, col) =
-                            ctx.line_index.offset_to_line_col(node.token.spos);
+                        let (line, col) = ctx.line_index.offset_to_line_col(node.token.spos);
                         let here = if is_quoted { "quoted" } else { "unquoted" };
                         let there = if is_quoted { "unquoted" } else { "quoted" };
                         violations.push(Violation {
