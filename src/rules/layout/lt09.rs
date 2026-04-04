@@ -162,10 +162,7 @@ mod tests {
     #[test]
     fn test_union_resets_state() {
         // Second SELECT resets ordering; WHERE after FROM in second query is ok
-        assert!(violations(
-            "select a from t\nunion all\nselect b from u where b = 1"
-        )
-        .is_empty());
+        assert!(violations("select a from t\nunion all\nselect b from u where b = 1").is_empty());
     }
 
     #[test]
@@ -178,10 +175,9 @@ mod tests {
     #[test]
     fn test_subquery_not_flagged() {
         // WHERE inside a subquery should not be checked against outer clause order
-        assert!(violations(
-            "select a from (select b where b = 1 from u) sub where a = 1"
-        )
-        .is_empty());
+        assert!(
+            violations("select a from (select b where b = 1 from u) sub where a = 1").is_empty()
+        );
     }
 
     #[test]

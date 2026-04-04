@@ -53,11 +53,7 @@ fn am05_select_commas_not_flagged() {
 
 #[test]
 fn am05_where_in_list_not_flagged() {
-    assert!(check(
-        ImplicitJoins,
-        "select a from t where a in (1, 2, 3)\n"
-    )
-    .is_empty());
+    assert!(check(ImplicitJoins, "select a from t where a in (1, 2, 3)\n").is_empty());
 }
 
 #[test]

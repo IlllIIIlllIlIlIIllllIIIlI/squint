@@ -65,7 +65,10 @@ fn lt03_fix_multiple_lines() {
 
 #[test]
 fn lt03_fix_mixed_tabs_and_spaces() {
-    assert_eq!(fix(TrailingWhitespace, "select a \t \nfrom t\n"), "select a\nfrom t\n");
+    assert_eq!(
+        fix(TrailingWhitespace, "select a \t \nfrom t\n"),
+        "select a\nfrom t\n"
+    );
 }
 
 #[test]

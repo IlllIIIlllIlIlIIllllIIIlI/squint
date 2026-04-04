@@ -214,7 +214,11 @@ fn main() {
                     plural(warning_count, "warning", "warnings"),
                 )
             } else {
-                let kind = if warning_count > 0 { ("warning", "warnings") } else { ("violation", "violations") };
+                let kind = if warning_count > 0 {
+                    ("warning", "warnings")
+                } else {
+                    ("violation", "violations")
+                };
                 format!("Found {} in 1 file.", plural(total, kind.0, kind.1))
             };
             writeln!(out, "{}", summary).unwrap();
@@ -428,7 +432,11 @@ fn main() {
                 plural(files_with_violations, "file", "files"),
             )
         } else {
-            let kind = if warning_count > 0 { ("warning", "warnings") } else { ("violation", "violations") };
+            let kind = if warning_count > 0 {
+                ("warning", "warnings")
+            } else {
+                ("violation", "violations")
+            };
             format!(
                 "Found {} in {}.",
                 plural(total, kind.0, kind.1),
