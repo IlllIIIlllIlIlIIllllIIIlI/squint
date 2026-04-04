@@ -107,5 +107,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Criterion microbenchmarks; Hyperfine wall-clock comparison vs sqlfluff/sqlfmt
 - `.pre-commit-hooks.yaml` — `sql-linter` (lint) and `sql-linter-fix` (lint + fix) hooks
 - MIT license
+- cargo-fuzz integration: three fuzz targets (`fuzz_lex`, `fuzz_lint`, `fuzz_fix`); 30-second CI smoke run on every PR, 5-minute weekly scheduled run
+
+### Fixed
+
+- **Panic on unterminated string literals containing multi-byte UTF-8 characters** — `lex_string` returned `Filter::Skip` for unterminated literals, silently dropping the opening `'` from the token prefix. This caused fix offsets computed as `spos - prefix.len()` to land inside a multi-byte character, making `replace_range` panic. Fixed by emitting unterminated strings as `StringLit` tokens spanning to end of input. Added a char-boundary guard in `apply_fixes` as defense in depth. Found by `cargo fuzz`.
 
 [Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/HEAD...HEAD
