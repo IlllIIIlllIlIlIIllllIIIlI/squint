@@ -95,23 +95,23 @@ fn classify_jinja(content: &str) -> JinjaKind {
 // ── logos callbacks ───────────────────────────────────────────────────────────
 
 fn lex_jinja_comment(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
-    match lex.remainder().find("#}") {
-        Some(end) => {
-            lex.bump(end + 2);
-            Filter::Emit(())
-        }
-        None => Filter::Skip,
+    let rem = lex.remainder();
+    match rem.find("#}") {
+        Some(end) => lex.bump(end + 2),
+        // Unterminated: consume to end so the opening `{#` is not silently
+        // dropped from pending_prefix (same class of bug as lex_string).
+        None => lex.bump(rem.len()),
     }
+    Filter::Emit(())
 }
 
 fn lex_jinja_expr(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
-    match lex.remainder().find("}}") {
-        Some(end) => {
-            lex.bump(end + 2);
-            Filter::Emit(())
-        }
-        None => Filter::Skip,
+    let rem = lex.remainder();
+    match rem.find("}}") {
+        Some(end) => lex.bump(end + 2),
+        None => lex.bump(rem.len()),
     }
+    Filter::Emit(())
 }
 
 fn lex_jinja_stmt(lex: &mut logos::Lexer<RawTok>) -> Filter<JinjaKind> {
@@ -122,18 +122,20 @@ fn lex_jinja_stmt(lex: &mut logos::Lexer<RawTok>) -> Filter<JinjaKind> {
             lex.bump(end + 2);
             Filter::Emit(kind)
         }
-        None => Filter::Skip,
+        None => {
+            lex.bump(rem.len());
+            Filter::Emit(JinjaKind::Statement)
+        }
     }
 }
 
 fn lex_block_comment(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
-    match lex.remainder().find("*/") {
-        Some(end) => {
-            lex.bump(end + 2);
-            Filter::Emit(())
-        }
-        None => Filter::Skip,
+    let rem = lex.remainder();
+    match rem.find("*/") {
+        Some(end) => lex.bump(end + 2),
+        None => lex.bump(rem.len()),
     }
+    Filter::Emit(())
 }
 
 fn lex_string(lex: &mut logos::Lexer<RawTok>) -> Filter<()> {
