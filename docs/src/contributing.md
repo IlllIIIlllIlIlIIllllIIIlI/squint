@@ -25,6 +25,11 @@ cargo test
 cargo fmt --check
 cargo clippy -- -D warnings
 cargo test
+cargo deny check
+
+# Fuzz testing (requires nightly)
+cargo install cargo-fuzz
+cargo +nightly fuzz run fuzz_lint fuzz/seeds/fuzz_lint -- -max_total_time=60
 ```
 
 ## Architecture
