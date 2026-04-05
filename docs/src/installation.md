@@ -5,7 +5,7 @@
 If your project already uses pip or a `requirements.txt`, this is the easiest option:
 
 ```bash
-pip install squint
+pip install pysquint
 ```
 
 This downloads a pre-built binary wheel for your platform — no Rust toolchain needed.
@@ -13,7 +13,7 @@ Works with pip ≥ 21, Python ≥ 3.8.
 
 For dbt projects using `uv`:
 ```bash
-uv add --dev squint
+uv add --dev pysquint
 ```
 
 ## From crates.io
