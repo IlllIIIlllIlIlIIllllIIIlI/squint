@@ -14,3 +14,5 @@ targets = ["aarch64-apple-darwin", "aarch64-unknown-linux-gnu", "x86_64-apple-da
 # Do not run the release workflow on pull_request triggers — only on version tags.
 # This prevents bots opening PRs from triggering the release pipeline.
 pr-run-mode = "skip"
+# Allow manual edits to the generated CI workflow (e.g. installer checksum verification).
+allow-dirty = ["ci"]
