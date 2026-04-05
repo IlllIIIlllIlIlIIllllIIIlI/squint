@@ -48,13 +48,13 @@ npm run compile
 
 ```bash
 npm run package
-# Produces: squint-0.1.0.vsix
+# Produces: squint-0.2.0.vsix
 ```
 
 ### Install in VS Code
 
 ```bash
-code --install-extension squint-0.1.0.vsix
+code --install-extension squint-0.2.0.vsix
 ```
 
 Or: Extensions panel → ··· menu → "Install from VSIX…"

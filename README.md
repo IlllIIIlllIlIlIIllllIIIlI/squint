@@ -23,9 +23,9 @@ support for Jinja templating.
 **pip** (no Rust required — downloads a pre-built binary):
 
 ```bash
-pip install squint
+pip install pysquint
 # or with uv
-uv add --dev squint
+uv add --dev pysquint
 ```
 
 **cargo** (compiles from source):

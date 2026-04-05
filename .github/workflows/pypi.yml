@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/squint
+      url: https://pypi.org/p/pysquint
     permissions:
       id-token: write  # for OIDC Trusted Publishing
 
