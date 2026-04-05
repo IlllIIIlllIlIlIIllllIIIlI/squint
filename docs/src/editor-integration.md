@@ -58,21 +58,27 @@ command = "squint-lsp"
 
 ## VS Code
 
-A VS Code extension is planned but not yet available. In the meantime, you can use the
-[Generic LSP Client](https://marketplace.visualstudio.com/items?itemName=kosz78.generic-lsp)
-extension with:
+A minimal extension is included in the repository under `editors/vscode/`.
+It is not yet published to the Marketplace, so install it manually:
 
-```json
-{
-  "genericLsp.servers": [
-    {
-      "name": "squint",
-      "command": "squint-lsp",
-      "filetypes": ["sql"]
-    }
-  ]
-}
+```bash
+cd editors/vscode
+npm install
+npm run compile
+npm run package        # produces squint-0.1.0.vsix
+code --install-extension squint-0.1.0.vsix
 ```
+
+The extension activates automatically for `sql` files. For `jinja-sql`
+support, also install the
+[Better Jinja](https://marketplace.visualstudio.com/items?itemName=samuelcolvin.jinjahtml)
+grammar extension.
+
+### Configuration
+
+| Setting | Default | Description |
+|---|---|---|
+| `squint.serverPath` | `""` | Path to the `squint-lsp` binary. Leave empty to use `PATH` or `~/.cargo/bin`. |
 
 ## Severity in diagnostics
 

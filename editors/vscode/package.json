@@ -1,0 +1,48 @@
+{
+  "name": "squint",
+  "displayName": "squint SQL linter",
+  "description": "Real-time SQL linting for dbt/Jinja SQL files via the squint LSP server",
+  "version": "0.1.0",
+  "publisher": "squint",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint"
+  },
+  "engines": {
+    "vscode": "^1.82.0"
+  },
+  "categories": ["Linters"],
+  "keywords": ["sql", "dbt", "jinja", "linter"],
+  "activationEvents": [
+    "onLanguage:sql",
+    "onLanguage:jinja-sql"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "squint",
+      "properties": {
+        "squint.serverPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the squint-lsp binary. Leave empty to use squint-lsp from PATH (or ~/.cargo/bin)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.82.0",
+    "@vscode/vsce": "^2.24.0",
+    "typescript": "^5.3.0"
+  }
+}
