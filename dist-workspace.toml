@@ -14,6 +14,9 @@ targets = ["aarch64-apple-darwin", "aarch64-unknown-linux-gnu", "x86_64-apple-da
 # Do not run the release workflow on pull_request triggers — only on version tags.
 # This prevents bots opening PRs from triggering the release pipeline.
 pr-run-mode = "skip"
+# Build with the lsp feature so squint-lsp is included in release artifacts.
+# Without this, cargo-dist fails to find the squint-lsp binary (it's feature-gated).
+features = ["lsp"]
 # Allow manual edits to the generated CI workflow (see .github/workflows/release.yml).
 # NOTE: because allow-dirty = ["ci"] is set, `dist generate` will NOT auto-update
 # release.yml when bumping cargo-dist-version. When upgrading cargo-dist:

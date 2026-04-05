@@ -42,16 +42,14 @@ your `PATH`.
 
 ## LSP server (optional)
 
-The language server binary is feature-gated and must be built explicitly:
+`squint-lsp` is included in the pre-built release binaries. Download it from the
+[GitHub Releases](https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/releases) page
+alongside the main `squint` binary.
+
+To build from source instead:
 
 ```bash
 cargo install squint --features lsp --bin squint-lsp
-```
-
-Or from source:
-
-```bash
-cargo install --path . --features lsp --bin squint-lsp
 ```
 
 See [Editor Integration](editor-integration.md) for setup instructions.
