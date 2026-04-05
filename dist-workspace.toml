@@ -14,3 +14,13 @@ targets = ["aarch64-apple-darwin", "aarch64-unknown-linux-gnu", "x86_64-apple-da
 # Do not run the release workflow on pull_request triggers — only on version tags.
 # This prevents bots opening PRs from triggering the release pipeline.
 pr-run-mode = "skip"
+# Allow manual edits to the generated CI workflow (see .github/workflows/release.yml).
+# NOTE: because allow-dirty = ["ci"] is set, `dist generate` will NOT auto-update
+# release.yml when bumping cargo-dist-version. When upgrading cargo-dist:
+#   1. Run `dist generate` to regenerate the baseline
+#   2. Re-apply the installer checksum verification on the "Install dist" step
+#      (download to /tmp, sha256sum -c, then run — see existing step for the pattern)
+#   3. Re-compute the SHA256: curl -sL <installer-url> | sha256sum
+#   4. Re-pin all `uses:` action references to commit hashes (not tags)
+#      e.g. `gh api repos/actions/checkout/git/ref/tags/v6 --jq '.object.sha'`
+allow-dirty = ["ci"]
