@@ -2,7 +2,7 @@
   "name": "squint",
   "displayName": "squint SQL linter",
   "description": "Real-time SQL linting for dbt/Jinja SQL files via the squint LSP server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "squint",
   "license": "MIT",
   "repository": {
