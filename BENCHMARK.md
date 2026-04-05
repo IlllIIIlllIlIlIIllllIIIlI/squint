@@ -139,9 +139,9 @@ The extra allocation cost of `BufWriter` is negligible. Real-world benefit comes
 
 | | |
 |---|---|
-| CPU | see `lscpu` |
+| CPU | AMD Ryzen 7 5700G with Radeon Graphics |
 | OS | Linux 6.17.0-19-generic |
-| Rust | `rustc --version` |
+| Rust | rustc 1.89.0 (29483883e 2025-08-04) |
 | sqlfluff | 4.1.0 |
 | sqlfmt | 0.29.0 |
 | hyperfine | 1.20.0 |

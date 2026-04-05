@@ -15,7 +15,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ### Added
 
-#### Rules (33 total)
+#### Rules (36 total)
 
 **Capitalisation** — all rules enforce lowercase output and are auto-fixable:
 - `CP01` — SQL keywords must be lowercase (`SELECT` → `select`)
@@ -32,6 +32,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `LT06` — No space between a function name and its `(` (auto-fix)
 - `LT07` — CTE closing `)` must be on its own line
 - `LT08` — A blank line is required after each CTE closing `)`
+- `LT09` — SQL clauses must appear in the standard order (`SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT`)
 - `LT10` — `DISTINCT`/`ALL` modifier must be on the same line as `SELECT`
 - `LT11` — Set operators (`UNION`, `INTERSECT`, `EXCEPT`) must be on their own line
 - `LT12` — File must end with exactly one trailing newline (auto-fix)
@@ -55,6 +56,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `CV03` — Trailing comma policy in `SELECT` clauses (configurable: `forbid` or `require`)
 - `CV04` — Consistent row-counting syntax: `COUNT(*)` vs `COUNT(1)` (configurable)
 - `CV05` — `NULL` comparisons must use `IS NULL` / `IS NOT NULL` (auto-fix)
+- `CV10` — Identifiers must use a consistent quoting style within a file
 
 **References:**
 - `RF01` — Qualified column references must use a known table alias

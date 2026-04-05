@@ -6,7 +6,7 @@ support for Jinja templating.
 
 ## Features
 
-- **35 rules** covering capitalisation, layout, aliasing, references, structure, and more
+- **36 rules** covering capitalisation, layout, aliasing, references, structure, and more
 - **Auto-fix** — rewrite files in place with `--fix`, or check for drift with `--check`
 - **Jinja-aware** — tokenises `{{ }}` and `{% %}` blocks without stripping them
 - **`-- noqa` suppression** — per-line and per-rule (`-- noqa: CP01,LT05`)

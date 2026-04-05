@@ -1,6 +1,6 @@
 # All Rules
 
-35 rules across 8 categories. Fixable rules are marked **✓** — run `--fix` to apply them
+36 rules across 8 categories. Fixable rules are marked **✓** — run `--fix` to apply them
 automatically.
 
 ## Capitalisation
