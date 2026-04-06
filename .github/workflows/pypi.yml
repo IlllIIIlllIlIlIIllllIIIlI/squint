@@ -1,10 +1,12 @@
 name: Publish to PyPI
 
-# Runs after a GitHub Release is published (by the release.yml workflow).
-# Builds platform-specific wheels with maturin and uploads them to PyPI.
+# Triggers on version tag pushes (same as release.yml).
+# Note: GitHub does not fire the `release: published` event for releases
+# created by GITHUB_TOKEN, so we trigger on the tag push directly instead.
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v[0-9]*'
 
 # Default to read-only. The publish job explicitly adds id-token: write
 # for OIDC Trusted Publishing.
