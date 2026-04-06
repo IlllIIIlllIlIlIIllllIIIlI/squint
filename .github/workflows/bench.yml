@@ -3,6 +3,11 @@ name: Benchmarks
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
+      - 'benches/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
 
 # Default to read-only. The benchmark job explicitly adds pull-requests: write
 # for posting the results comment.
