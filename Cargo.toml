@@ -1,5 +1,5 @@
 [package]
-name          = "squint"
+name          = "squint-linter"
 version       = "1.0.0"
 edition       = "2021"
 description   = "A fast SQL linter for dbt and Jinja SQL files"
@@ -60,6 +60,14 @@ criterion = { version = "0.8", features = ["html_reports"] }
 [[bench]]
 name    = "linter_bench"
 harness = false
+
+[lib]
+name = "squint"
+path = "src/lib.rs"
+
+[[bin]]
+name              = "squint"
+path              = "src/main.rs"
 
 [[bin]]
 name              = "squint-lsp"

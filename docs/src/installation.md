@@ -19,7 +19,7 @@ uv add --dev pysquint
 ## From crates.io
 
 ```bash
-cargo install squint
+cargo install squint-linter
 ```
 
 This compiles from source. Requires [Rust](https://rustup.rs/) stable.
@@ -49,7 +49,7 @@ alongside the main `squint` binary.
 To build from source instead:
 
 ```bash
-cargo install squint --features lsp --bin squint-lsp
+cargo install squint-linter --features lsp --bin squint-lsp
 ```
 
 See [Editor Integration](editor-integration.md) for setup instructions.

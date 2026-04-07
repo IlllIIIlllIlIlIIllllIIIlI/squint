@@ -11,7 +11,7 @@ Problems panel as you type.
 The `squint-lsp` binary must be installed separately:
 
 ```bash
-cargo install squint --features lsp --bin squint-lsp
+cargo install squint-linter --features lsp --bin squint-lsp
 ```
 
 This places the binary at `~/.cargo/bin/squint-lsp`, which the extension
