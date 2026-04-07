@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bench_compare.sh — Wall-clock comparison: rust-sql-linter vs sqlfluff vs sqlfmt
+# bench_compare.sh — Wall-clock comparison: squint vs sqlfluff vs sqlfmt
 #
 # Prerequisites:
 #   cargo build --release
@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 FIXTURES="${PROJECT_ROOT}/benches/fixtures"
 RESULTS="${PROJECT_ROOT}/results"
-BINARY="${PROJECT_ROOT}/target/release/rust-sql-linter"
+BINARY="${PROJECT_ROOT}/target/release/squint"
 
 # ── Parse arguments ───────────────────────────────────────────────────────────
 
@@ -77,7 +77,7 @@ run_suite() {
         "--ignore-failure"
         "--export-markdown" "${RESULTS}/bench_${label}.md"
         "--export-json"     "${RESULTS}/bench_${label}.json"
-        "--command-name" "rust-sql-linter"
+        "--command-name" "squint"
         "${BINARY} --quiet ${fixture_file}"
     )
 

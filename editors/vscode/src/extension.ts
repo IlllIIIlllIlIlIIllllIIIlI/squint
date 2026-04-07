@@ -30,6 +30,7 @@ export function activate(context: ExtensionContext): void {
   const clientOptions: LanguageClientOptions = {
     documentSelector: [
       { scheme: "file", language: "sql" },
+      { scheme: "file", language: "mssql" },
       { scheme: "file", language: "jinja-sql" },
     ],
     synchronize: {

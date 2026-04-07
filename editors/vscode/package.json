@@ -12,10 +12,18 @@
   "engines": {
     "vscode": "^1.82.0"
   },
-  "categories": ["Linters"],
-  "keywords": ["sql", "dbt", "jinja", "linter"],
+  "categories": [
+    "Linters"
+  ],
+  "keywords": [
+    "sql",
+    "dbt",
+    "jinja",
+    "linter"
+  ],
   "activationEvents": [
     "onLanguage:sql",
+    "onLanguage:mssql",
     "onLanguage:jinja-sql"
   ],
   "main": "./out/extension.js",
@@ -32,8 +40,10 @@
     }
   },
   "scripts": {
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run bundle",
+    "bundle": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --platform=node --format=cjs --minify",
+    "compile": "tsc --noEmit",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --platform=node --format=cjs --sourcemap --watch",
     "package": "vsce package"
   },
   "dependencies": {
@@ -43,6 +53,7 @@
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.82.0",
     "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.28.0",
     "typescript": "^5.3.0"
   }
 }

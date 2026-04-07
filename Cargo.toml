@@ -11,7 +11,31 @@ keywords      = ["dbt", "jinja", "linter", "sql", "sqlfluff"]
 categories    = ["command-line-utilities", "development-tools"]
 license       = "MIT"
 readme        = "README.md"
-exclude       = [".claude/", "benches/", "results/", "scripts/", "tests/"]
+exclude = [
+    # CI / repo tooling
+    ".claude/",
+    ".github/",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    "cliff.toml",
+    "deny.toml",
+    "dist-workspace.toml",
+    # Python packaging
+    "pyproject.toml",
+    "python/",
+    # VS Code extension
+    "editors/",
+    # Docs source (readable at https://IlllIIIlllIlIlIIllllIIIlI.github.io/squint)
+    "docs/",
+    # Dev / benchmark / test artefacts
+    "benches/",
+    "results/",
+    "scripts/",
+    "tests/",
+    # Repo-maintenance docs not useful to crates.io users
+    "BENCHMARK.md",
+    "RELEASING.md",
+]
 
 [dependencies]
 regex      = "1.12.3"
