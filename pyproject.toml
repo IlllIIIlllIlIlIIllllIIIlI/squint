@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "pysquint"
-version = "0.2.0"
+version = "1.0.0"
 description = "A fast SQL linter for dbt and Jinja SQL files"
 authors = [{ name = "IlllIIIlllIlIlIIllllIIIlI" }]
 license = { text = "MIT" }
@@ -12,7 +12,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["dbt", "jinja", "linter", "sql", "sqlfluff"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Rust",

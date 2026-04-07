@@ -288,7 +288,7 @@ Add to your `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
-    rev: v0.2.0
+    rev: v1.0.0
     hooks:
       - id: squint
 ```

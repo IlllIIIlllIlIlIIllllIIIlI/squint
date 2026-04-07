@@ -10,7 +10,7 @@ Add to your `.pre-commit-config.yaml`:
 ```yaml
 repos:
   - repo: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint
-    rev: v0.2.0   # pin to a release tag
+    rev: v1.0.0   # pin to a release tag
     hooks:
       - id: squint
 ```
@@ -52,6 +52,6 @@ Project-level config (severity overrides, line length, etc.) is applied automati
 
 ## Pinning a version
 
-Always pin to a tag (`rev: v0.2.0`) rather than a branch name. pre-commit caches the
+Always pin to a tag (`rev: v1.0.0`) rather than a branch name. pre-commit caches the
 binary per rev, so floating tags like `main` defeat caching and force a rebuild on every
 run.

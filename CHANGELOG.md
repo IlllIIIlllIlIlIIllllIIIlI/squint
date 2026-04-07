@@ -13,6 +13,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-06
+
+### Added
+
+- **VS Code extension** — real-time diagnostics via the squint LSP server; install `squint-lsp` and add the extension from the VS Code Marketplace
+- **Published to crates.io** — `cargo install squint` now available
+
+### Changed
+
+- **PyPI package status** updated to Production/Stable
+
 ## [0.2.0] - 2026-04-05
 
 ### Added
@@ -123,5 +134,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - **Pre-commit hook IDs renamed**: `sql-linter` → `squint`, `sql-linter-fix` → `squint-fix`. Update your `.pre-commit-config.yaml` accordingly.
 - **`pyproject.toml` support**: config can now be placed under `[tool.squint]` in `pyproject.toml`. squint checks `squint.toml` first, then `pyproject.toml` with a `[tool.squint]` section, at each level of the directory walk.
 
-[Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/releases/tag/v1.0.0
 [0.2.0]: https://github.com/IlllIIIlllIlIlIIllllIIIlI/squint/releases/tag/v0.2.0
