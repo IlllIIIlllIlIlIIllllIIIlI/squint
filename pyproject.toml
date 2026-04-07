@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "pysquint"
-version = "1.0.0"
+version = "1.0.1"
 description = "A fast SQL linter for dbt and Jinja SQL files"
 authors = [{ name = "IlllIIIlllIlIlIIllllIIIlI" }]
 license = { text = "MIT" }
