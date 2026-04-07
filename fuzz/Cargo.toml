@@ -12,6 +12,7 @@ libfuzzer-sys = "0.4"
 
 [dependencies.squint]
 path = ".."
+package = "squint-linter"
 
 # ── Fuzz targets ────────────────────────────────────────────────────────────
 
