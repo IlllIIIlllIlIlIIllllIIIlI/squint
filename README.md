@@ -31,7 +31,7 @@ uv add --dev pysquint
 **cargo** (compiles from source):
 
 ```bash
-cargo install squint
+cargo install squint-linter
 ```
 
 **Pre-built binaries** for Linux, macOS, and Windows are attached to each
@@ -40,7 +40,7 @@ cargo install squint
 **LSP server** (optional, feature-gated):
 
 ```bash
-cargo install squint --features lsp --bin squint-lsp
+cargo install squint-linter --features lsp --bin squint-lsp
 ```
 
 ## Quick start

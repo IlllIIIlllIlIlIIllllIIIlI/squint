@@ -8,7 +8,7 @@ diagnostics in any LSP-capable editor.
 The LSP server is feature-gated. Build it with:
 
 ```bash
-cargo install squint --features lsp --bin squint-lsp
+cargo install squint-linter --features lsp --bin squint-lsp
 ```
 
 Or from source:
